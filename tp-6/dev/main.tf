@@ -10,6 +10,7 @@ module "firewall" {
 module "instance" {
   source    = "../modules/instance"
   subnet_id = module.network.output_subnet_id
+  instance_template = var.template
 }
 
 
