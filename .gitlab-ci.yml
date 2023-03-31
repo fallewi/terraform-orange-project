@@ -50,7 +50,6 @@ stages:
 tf-fmt:
   stage: validate
   script:
-    - terraform workspace new prod
     - terraform fmt
   only:
     changes:
@@ -112,7 +111,15 @@ apply:
     - terraform apply -auto-approve $TF_PLAN_NAME 
   only:
     - main
-
+    
+  artifacts:
+    reports:
+      terraform: ${TF_ROOT}/$TF_PLAN_JSON
+    paths:
+      - ${TF_ROOT}/$TF_PLAN_NAME
+      - ${TF_ROOT}/$TF_PLAN_JSON
+      
+      
 destroy:
   stage: destroy
   when: manual
