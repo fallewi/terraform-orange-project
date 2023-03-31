@@ -1,5 +1,5 @@
 
-rkflow image
+#worrkflow image
 image:
   name: hashicorp/terraform:0.13.2
   entrypoint:
@@ -8,7 +8,7 @@ image:
 
 # Workflow variables. They can be overwritten by passing pipeline Variables in Gitlab repository
 variables:     
-  TF_ROOT: $CI_PROJECT_DIR/dev
+  TF_ROOT: $CI_PROJECT_DIR/tp-6/dev
   TF_LOG: WARN
   TF_TIMEOUT: "-lock-timeout=600s"
   TF_PLAN_NAME: plan.tfplan
@@ -21,6 +21,8 @@ variables:
 .terraform-ver-init: &terraform-ver-init
   - cd $TF_ROOT
   - terraform version
+  - echo $APPLICATION_CREDENTIALS > credentials.json
+  - export GOOGLE_APPLICATION_CREDENTIALS="credentials.json"
   - terraform init --upgrade=True
 
 #terraform init is run before any stage jobs
@@ -41,13 +43,14 @@ stages:
   - validate
   - plan
   - apply
+  - destroy
 
 #Job: tf-fmt | Stage: validate
 #Purpose: check the format (fmt) as a sort of linting test
 tf-fmt:
   stage: validate
   script:
-    - terraform fmt -recursive -check
+    - terraform fmt
   only:
     changes:
       - "*.tf"
@@ -108,3 +111,15 @@ apply:
     - terraform apply -auto-approve $TF_PLAN_NAME 
   only:
     - main
+
+destroy:
+  stage: destroy
+  when: manual
+  dependencies:
+    - apply
+  script:
+    - cd $TF_ROOT
+    - terraform destroy -auto-approve $TF_PLAN_NAME 
+  only:
+    - main
+
