@@ -1,5 +1,5 @@
 module "network" {
-  source = "../modules/netwok"
+  source = "../modules/network"
     }
 
 module "firewall" {
