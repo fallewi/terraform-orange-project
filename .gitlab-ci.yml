@@ -50,6 +50,7 @@ stages:
 tf-fmt:
   stage: validate
   script:
+    - terraform workspace new prod
     - terraform fmt
   only:
     changes:
