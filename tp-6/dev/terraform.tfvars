@@ -1,1 +1,1 @@
-template = "f1.micro"
+template = "f1-micro"
