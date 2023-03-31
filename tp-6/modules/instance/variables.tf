@@ -1,7 +1,7 @@
 variable "maintainer" {
-	tring
-  default     = "us-central1"
-  description = "région de déploiement de mes ressources"
+  type = string
+  default     = "lewis"
+  description = "tag pour le déploiement des ressources"
 }
 
 variable "region" {
